@@ -16,15 +16,15 @@ namespace ScriptRunner.Plugins.AzureSuite;
     "AzureResource Client Plugin",
     "Provides ScriptRunner with a Azure Resource Client",
     "Peter van de Pas",
-    "1.0.0",
+    "1.0.2",
     "net8.0",
-    ["IAzureResourceClient"])]
+    ["IAzureResourceClient", "IAzureKeyVault", "IAzureTableStorage"])]
 public class Plugin : IServicePlugin
 {
     /// <summary>
     ///     Gets the name of the plugin.
     /// </summary>
-    public string Name => "AzureResource Client Plugin";
+    public string Name => "Azure Suite Plugin";
 
     /// <summary>
     ///     Initializes the plugin with the provided configuration.
@@ -52,5 +52,7 @@ public class Plugin : IServicePlugin
     public void RegisterServices(IServiceCollection services)
     {
         services.AddSingleton<IAzureResourceClient, AzureResourceClient>();
+        services.AddSingleton<IAzureKeyVault, AzureKeyVault>();
+        services.AddSingleton<IAzureTableStorage, AzureTableStorage>();
     }
 }

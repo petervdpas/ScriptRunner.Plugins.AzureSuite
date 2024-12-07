@@ -13,15 +13,11 @@
       <PackageReference Include="Azure.Data.Tables" Version="12.9.1" />
       <PackageReference Include="Azure.Identity" Version="1.13.1" />
       <PackageReference Include="Azure.ResourceManager" Version="1.13.0" />
+      <PackageReference Include="Azure.Security.KeyVault.Secrets" Version="4.7.0" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.0" />
-      <PackageReference Include="ScriptRunner.Plugins" Version="1.0.0" />
+      <PackageReference Include="ScriptRunner.Plugins" Version="1.0.2" />
     </ItemGroup>
-
-    <ItemGroup>
-        <Content Include="CookBookPages\**\*" CopyToOutputDirectory="PreserveNewest" />
-        <Content Include="DemoScripts\**\*" CopyToOutputDirectory="PreserveNewest" />
-    </ItemGroup>
-
+    
     <!-- Separate Plugin DLL and Dependencies -->
     <Target Name="SeparatePluginAndDependencies" AfterTargets="Build">
         <!-- Ensure Dependencies subdirectory exists -->
@@ -46,6 +42,20 @@
         <!-- Copy dependencies to the Dependencies subdirectory -->
         <Copy SourceFiles="@(DependencyAssemblies)"
               DestinationFolder="..\Plugins\Dependencies"
+              SkipUnchangedFiles="true" />
+
+        <!-- Copy DemoScripts and CookBooks to the Plugins directory -->
+        <ItemGroup>
+            <DemoScripts Include="$(ProjectDir)DemoScripts\**\*" />
+            <CookBookPages Include="$(ProjectDir)CookBookPages\**\*" />
+        </ItemGroup>
+
+        <Copy SourceFiles="@(DemoScripts)"
+              DestinationFolder="..\Plugins\DemoScripts"
+              SkipUnchangedFiles="true" />
+
+        <Copy SourceFiles="@(CookBookPages)"
+              DestinationFolder="..\Plugins\CookBookPages"
               SkipUnchangedFiles="true" />
     </Target>
     

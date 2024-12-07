@@ -38,6 +38,61 @@
             A <see cref="T:Azure.ResourceManager.Resources.SubscriptionResource"/> representing the specified subscription.
             </returns>
         </member>
+        <member name="T:ScriptRunner.Plugins.AzureSuite.AzureKeyVault">
+            <summary>
+                A helper class to connect to Azure Key Vault and retrieve secrets.
+                Implements <see cref="T:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureKeyVault" />.
+            </summary>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureKeyVault.#ctor(ScriptRunner.Plugins.IPluginLogger)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ScriptRunner.Plugins.AzureSuite.AzureKeyVault"/> class with the specified logger.
+            </summary>
+            <param name="logger">
+            The <see cref="T:ScriptRunner.Plugins.IPluginLogger"/> instance used for logging messages within the Azure Key Vault operations.
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+            Thrown when the <paramref name="logger"/> parameter is <c>null</c>.
+            </exception>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureKeyVault.InitializeKeyVaultAsync(System.String)">
+            <summary>
+                Initializes the Key Vault connection.
+            </summary>
+            <param name="vaultUrl">The URL of the Azure Key Vault.</param>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureKeyVault.GetSecretAsync(System.String)">
+            <summary>
+                Retrieves a secret from Azure Key Vault by its name.
+            </summary>
+            <param name="secretName">The name of the secret in the Key Vault.</param>
+            <returns>The secret value.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureKeyVault.SetSecretAsync(System.String,System.String)">
+            <summary>
+                Sets or updates a secret in Azure Key Vault.
+            </summary>
+            <param name="secretName">The name of the secret to set or update.</param>
+            <param name="secretValue">The value of the secret.</param>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureKeyVault.DeleteSecretAsync(System.String)">
+            <summary>
+                Deletes a secret from Azure Key Vault (soft delete).
+            </summary>
+            <param name="secretName">The name of the secret to delete.</param>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureKeyVault.PurgeSecretAsync(System.String)">
+            <summary>
+                Purges a deleted secret from Azure Key Vault (permanently deletes).
+            </summary>
+            <param name="secretName">The name of the secret to purge.</param>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureKeyVault.RecoverDeletedSecretAsync(System.String)">
+            <summary>
+                Recovers a deleted secret from Azure Key Vault.
+            </summary>
+            <param name="secretName">The name of the secret to recover.</param>
+        </member>
         <member name="T:ScriptRunner.Plugins.AzureSuite.AzureResourceClient">
             <summary>
             A client for managing Azure resources using the Azure Resource Manager (ARM) SDK.
@@ -230,6 +285,56 @@
             <returns>
             A <see cref="T:Azure.ResourceManager.Resources.SubscriptionResource"/> representing the specified subscription.
             </returns>
+        </member>
+        <member name="T:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureKeyVault">
+            <summary>
+            Provides an interface for interacting with Azure Key Vault to manage secrets.
+            </summary>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureKeyVault.InitializeKeyVaultAsync(System.String)">
+            <summary>
+            Initializes the Azure Key Vault connection.
+            </summary>
+            <param name="vaultUrl">The URL of the Azure Key Vault.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureKeyVault.GetSecretAsync(System.String)">
+            <summary>
+            Retrieves a secret from Azure Key Vault by its name.
+            </summary>
+            <param name="secretName">The name of the secret to retrieve.</param>
+            <returns>
+            A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation. The task result contains the secret value as a string.
+            </returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureKeyVault.SetSecretAsync(System.String,System.String)">
+            <summary>
+            Sets or updates a secret in Azure Key Vault.
+            </summary>
+            <param name="secretName">The name of the secret to set or update.</param>
+            <param name="secretValue">The value of the secret.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureKeyVault.DeleteSecretAsync(System.String)">
+            <summary>
+            Deletes a secret from Azure Key Vault (soft delete).
+            </summary>
+            <param name="secretName">The name of the secret to delete.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureKeyVault.PurgeSecretAsync(System.String)">
+            <summary>
+            Permanently deletes a secret from Azure Key Vault (purges a soft-deleted secret).
+            </summary>
+            <param name="secretName">The name of the secret to purge.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureKeyVault.RecoverDeletedSecretAsync(System.String)">
+            <summary>
+            Recovers a previously deleted secret from Azure Key Vault.
+            </summary>
+            <param name="secretName">The name of the secret to recover.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
         </member>
         <member name="T:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureResourceClient">
             <summary>
