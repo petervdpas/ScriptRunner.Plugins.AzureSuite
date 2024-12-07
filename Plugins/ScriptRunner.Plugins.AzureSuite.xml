@@ -1,0 +1,429 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ScriptRunner.Plugins.AzureSuite</name>
+    </assembly>
+    <members>
+        <member name="T:ScriptRunner.Plugins.AzureSuite.ArmClientWrapper">
+            <summary>
+            A wrapper for the Azure Resource Manager (ARM) client to facilitate interaction with Azure resources.
+            </summary>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.ArmClientWrapper.#ctor(Azure.Core.TokenCredential)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ScriptRunner.Plugins.AzureSuite.ArmClientWrapper"/> class.
+            </summary>
+            <param name="credential">
+            The <see cref="T:Azure.Core.TokenCredential"/> used for authenticating with Azure services.
+            </param>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.ArmClientWrapper.GetArmClient">
+            <summary>
+            Retrieves the underlying ARM client instance.
+            </summary>
+            <returns>The <see cref="T:Azure.ResourceManager.ArmClient"/> instance.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.ArmClientWrapper.GetSubscriptions">
+            <summary>
+            Retrieves a collection of subscriptions available to the authenticated user.
+            </summary>
+            <returns>A <see cref="T:Azure.ResourceManager.Resources.SubscriptionCollection"/> containing the available subscriptions.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.ArmClientWrapper.GetSubscriptionResource(System.String)">
+            <summary>
+            Retrieves a specific subscription resource by its ID.
+            </summary>
+            <param name="subscriptionId">The ID of the subscription to retrieve.</param>
+            <returns>
+            A <see cref="T:Azure.ResourceManager.Resources.SubscriptionResource"/> representing the specified subscription.
+            </returns>
+        </member>
+        <member name="T:ScriptRunner.Plugins.AzureSuite.AzureResourceClient">
+            <summary>
+            A client for managing Azure resources using the Azure Resource Manager (ARM) SDK.
+            </summary>
+        </member>
+        <member name="P:ScriptRunner.Plugins.AzureSuite.AzureResourceClient.CurrentSubscription">
+            <summary>
+            Gets or sets the current subscription context.
+            </summary>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureResourceClient.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:ScriptRunner.Plugins.AzureSuite.AzureResourceClient"/> class with default credentials.
+            </summary>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureResourceClient.#ctor(ScriptRunner.Plugins.AzureSuite.Interfaces.IArmClientWrapper)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ScriptRunner.Plugins.AzureSuite.AzureResourceClient"/> class with a custom <see cref="T:ScriptRunner.Plugins.AzureSuite.Interfaces.IArmClientWrapper"/>.
+            </summary>
+            <param name="armClientWrapper">The ARM client wrapper for managing Azure resources.</param>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureResourceClient.ListSubscriptionsAsync">
+            <summary>
+                Lists all available subscriptions for the authenticated Azure account.
+            </summary>
+            <returns>A collection of <see cref="T:Azure.ResourceManager.Resources.SubscriptionResource" /> objects representing the subscriptions.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureResourceClient.SetSubscriptionContextAsync(System.String)">
+            <summary>
+                Sets the current subscription context for further operations.
+            </summary>
+            <param name="subscriptionId">The ID of the subscription to set as the current context.</param>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureResourceClient.GetResourceGroupsByTagAsync(System.String,System.String)">
+            <summary>
+                Gets resource groups with a specific tag and value.
+            </summary>
+            <param name="tagName">The name of the tag to filter by.</param>
+            <param name="tagValue">The value of the tag to filter by.</param>
+            <returns>A collection of <see cref="T:Azure.ResourceManager.Resources.ResourceGroupResource" /> objects that match the tag.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureResourceClient.GetResourcesInResourceGroupAsync(System.String)">
+            <summary>
+                Gets all resources in a specified resource group.
+            </summary>
+            <param name="resourceGroupName">The name of the resource group.</param>
+            <returns>A collection of <see cref="T:ScriptRunner.Plugins.AzureSuite.Models.AzureResource" /> objects representing the resources in the group.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureResourceClient.GetResourcesInResourceGroupAsJsonAsync(System.String)">
+            <summary>
+                Gets all resources in a specified resource group and returns them as a JSON string.
+            </summary>
+            <param name="resourceGroupName">The name of the resource group.</param>
+            <returns>A JSON string representing the resources in the group.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureResourceClient.SaveResourcesToJsonFileAsync(System.String,System.String)">
+            <summary>
+                Saves all resources in a specified resource group to a JSON file.
+            </summary>
+            <param name="resourceGroupName">The name of the resource group.</param>
+            <param name="filePath">The path to the file where the JSON will be saved.</param>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureResourceClient.GetResourcesByTypeAsync(System.String)">
+            <summary>
+                Gets all resources of a specific type across all resource groups.
+            </summary>
+            <param name="resourceType">The type of resources to filter by.</param>
+            <returns>A collection of <see cref="T:ScriptRunner.Plugins.AzureSuite.Models.AzureResource" /> objects of the specified type.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureResourceClient.CountResourcesByLocationAsync">
+            <summary>
+                Counts the number of resources by their location.
+            </summary>
+            <returns>A dictionary where the key is the location and the value is the count of resources.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureResourceClient.GetResourcesByTagsAsync(System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+                Gets resources that match the specified tags.
+            </summary>
+            <param name="tags">A dictionary of tag names and values to filter by.</param>
+            <returns>A collection of <see cref="T:ScriptRunner.Plugins.AzureSuite.Models.AzureResource" /> objects that match the tags.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureResourceClient.ListResourceProvidersAsync">
+            <summary>
+                Lists all resource providers for the current subscription.
+            </summary>
+            <returns>A collection of strings representing the namespaces of the resource providers.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureResourceClient.ResourceExistsAsync(System.String,System.String)">
+            <summary>
+                Checks if a resource exists in a specified resource group.
+            </summary>
+            <param name="resourceGroupName">The name of the resource group.</param>
+            <param name="resourceName">The name of the resource.</param>
+            <returns><c>true</c> if the resource exists; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureResourceClient.EnsureSubscriptionContextIsSet">
+            <summary>
+            Ensures that the subscription context has been set.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">Thrown when the subscription context is not set.</exception>
+        </member>
+        <member name="T:ScriptRunner.Plugins.AzureSuite.AzureTableStorage">
+            <summary>
+                Provides methods for interacting with Azure Table Storage.
+                Implements <see cref="T:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureTableStorage" />.
+            </summary>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureTableStorage.Initialize(System.String,System.String)">
+            <summary>
+                Initializes the Table Storage client with a connection string and table name.
+                This must be called before performing any other operations.
+            </summary>
+            <param name="connectionString">The connection string for the Storage Account.</param>
+            <param name="tableName">The name of the table to interact with.</param>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureTableStorage.UpsertEntityAsync``1(``0)">
+            <summary>
+                Adds or updates an entity in the table.
+            </summary>
+            <param name="entity">The entity to add or update.</param>
+            <returns>A task representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureTableStorage.DeleteEntityAsync(System.String,System.String)">
+            <summary>
+                Deletes an entity from the table.
+            </summary>
+            <param name="partitionKey">The partition key of the entity.</param>
+            <param name="rowKey">The row key of the entity.</param>
+            <returns>A task representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureTableStorage.GetEntityAsync``1(System.String,System.String)">
+            <summary>
+                Retrieves an entity from the table by partition key and row key.
+            </summary>
+            <typeparam name="T">The type of the entity (must implement ITableEntity).</typeparam>
+            <param name="partitionKey">The partition key of the entity.</param>
+            <param name="rowKey">The row key of the entity.</param>
+            <returns>The entity if found, or null if not found.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureTableStorage.QueryEntitiesAsync``1(System.String)">
+            <summary>
+                Queries entities in the table based on a filter.
+            </summary>
+            <typeparam name="T">The type of the entity (must implement ITableEntity).</typeparam>
+            <param name="filter">The OData filter expression.</param>
+            <returns>A list of entities that match the filter.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureTableStorage.CheckEntitiesExistAsync``1(System.Collections.Generic.List{System.String})">
+            <summary>
+                Checks if the entities with the specified RowKeys exist in the Azure Table Storage.
+            </summary>
+            <typeparam name="T">The type of the entity (must implement <see cref="T:Azure.Data.Tables.ITableEntity" />).</typeparam>
+            <param name="rowKeys">The list of RowKeys to check for existence in the table.</param>
+            <returns>
+                A task representing the asynchronous operation, containing a list of RowKeys that exist in the table.
+            </returns>
+            <remarks>
+                This method queries the table for each RowKey provided in the list. If any entities with matching
+                RowKeys are found, they are added to the resulting list.
+            </remarks>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureTableStorage.EnsureConfigured">
+            <summary>
+                Ensures the table client is properly configured before performing any operations.
+            </summary>
+        </member>
+        <member name="T:ScriptRunner.Plugins.AzureSuite.Interfaces.IArmClientWrapper">
+            <summary>
+            Defines a wrapper interface for the Azure Resource Manager (ARM) client to interact with Azure resources.
+            </summary>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.Interfaces.IArmClientWrapper.GetArmClient">
+            <summary>
+            Retrieves the underlying ARM client instance.
+            </summary>
+            <returns>The <see cref="T:Azure.ResourceManager.ArmClient"/> instance used for managing Azure resources.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.Interfaces.IArmClientWrapper.GetSubscriptions">
+            <summary>
+            Retrieves a collection of subscriptions available to the authenticated user.
+            </summary>
+            <returns>A <see cref="T:Azure.ResourceManager.Resources.SubscriptionCollection"/> containing the subscriptions.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.Interfaces.IArmClientWrapper.GetSubscriptionResource(System.String)">
+            <summary>
+            Retrieves a specific subscription resource by its ID.
+            </summary>
+            <param name="subscriptionId">The ID of the subscription to retrieve.</param>
+            <returns>
+            A <see cref="T:Azure.ResourceManager.Resources.SubscriptionResource"/> representing the specified subscription.
+            </returns>
+        </member>
+        <member name="T:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureResourceClient">
+            <summary>
+            Provides an interface for managing Azure resources using the Azure Resource Manager (ARM) SDK.
+            </summary>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureResourceClient.ListSubscriptionsAsync">
+            <summary>
+            Lists all subscriptions available for the authenticated Azure account.
+            </summary>
+            <returns>A collection of <see cref="T:Azure.ResourceManager.Resources.SubscriptionResource"/> representing the subscriptions.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureResourceClient.SetSubscriptionContextAsync(System.String)">
+            <summary>
+            Sets the current subscription context for resource management operations.
+            </summary>
+            <param name="subscriptionId">The subscription ID to set as the current context.</param>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureResourceClient.GetResourceGroupsByTagAsync(System.String,System.String)">
+            <summary>
+            Retrieves resource groups with a specific tag name and value.
+            </summary>
+            <param name="tagName">The name of the tag to filter by.</param>
+            <param name="tagValue">The value of the tag to filter by.</param>
+            <returns>A collection of <see cref="T:Azure.ResourceManager.Resources.ResourceGroupResource"/> matching the specified tag.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureResourceClient.GetResourcesInResourceGroupAsync(System.String)">
+            <summary>
+            Gets all resources within a specified resource group.
+            </summary>
+            <param name="resourceGroupName">The name of the resource group to query.</param>
+            <returns>A collection of <see cref="T:ScriptRunner.Plugins.AzureSuite.Models.AzureResource"/> representing the resources in the group.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureResourceClient.GetResourcesInResourceGroupAsJsonAsync(System.String)">
+            <summary>
+            Gets all resources within a specified resource group and returns them as a JSON string.
+            </summary>
+            <param name="resourceGroupName">The name of the resource group to query.</param>
+            <returns>A JSON-formatted string representing the resources in the group.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureResourceClient.SaveResourcesToJsonFileAsync(System.String,System.String)">
+            <summary>
+            Saves all resources within a specified resource group to a JSON file.
+            </summary>
+            <param name="resourceGroupName">The name of the resource group to query.</param>
+            <param name="filePath">The file path to save the JSON data.</param>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureResourceClient.GetResourcesByTypeAsync(System.String)">
+            <summary>
+            Retrieves all resources of a specified type across all resource groups in the current subscription.
+            </summary>
+            <param name="resourceType">The type of resources to filter by.</param>
+            <returns>A collection of <see cref="T:ScriptRunner.Plugins.AzureSuite.Models.AzureResource"/> representing the matching resources.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureResourceClient.CountResourcesByLocationAsync">
+            <summary>
+            Counts resources by their location within the current subscription.
+            </summary>
+            <returns>A dictionary where keys are location names and values are resource counts.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureResourceClient.GetResourcesByTagsAsync(System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Retrieves resources that match a set of specified tags.
+            </summary>
+            <param name="tags">A dictionary of tag names and values to filter by.</param>
+            <returns>A collection of <see cref="T:ScriptRunner.Plugins.AzureSuite.Models.AzureResource"/> representing the matching resources.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureResourceClient.ListResourceProvidersAsync">
+            <summary>
+            Lists all resource providers available in the current subscription.
+            </summary>
+            <returns>A collection of strings representing the namespaces of the resource providers.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureResourceClient.ResourceExistsAsync(System.String,System.String)">
+            <summary>
+            Checks if a specific resource exists within a resource group.
+            </summary>
+            <param name="resourceGroupName">The name of the resource group to search.</param>
+            <param name="resourceName">The name of the resource to check for.</param>
+            <returns><c>true</c> if the resource exists; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="T:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureTableStorage">
+            <summary>
+            Provides methods for interacting with Azure Table Storage.
+            </summary>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureTableStorage.Initialize(System.String,System.String)">
+            <summary>
+            Initializes the Table Storage client with a connection string and table name.
+            This must be called before performing any other operations.
+            </summary>
+            <param name="connectionString">The connection string for the Storage Account.</param>
+            <param name="tableName">The name of the table to interact with.</param>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureTableStorage.UpsertEntityAsync``1(``0)">
+            <summary>
+            Adds or updates an entity in the table.
+            </summary>
+            <typeparam name="T">The type of the entity, which must implement <see cref="T:Azure.Data.Tables.ITableEntity"/>.</typeparam>
+            <param name="entity">The entity to add or update.</param>
+            <returns>A task representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureTableStorage.DeleteEntityAsync(System.String,System.String)">
+            <summary>
+            Deletes an entity from the table by its partition key and row key.
+            </summary>
+            <param name="partitionKey">The partition key of the entity.</param>
+            <param name="rowKey">The row key of the entity.</param>
+            <returns>A task representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureTableStorage.GetEntityAsync``1(System.String,System.String)">
+            <summary>
+            Retrieves an entity from the table using the specified partition key and row key.
+            </summary>
+            <typeparam name="T">The type of the entity, which must implement <see cref="T:Azure.Data.Tables.ITableEntity"/>.</typeparam>
+            <param name="partitionKey">The partition key of the entity.</param>
+            <param name="rowKey">The row key of the entity.</param>
+            <returns>A task representing the asynchronous operation, containing the entity if found, or null if not found.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureTableStorage.QueryEntitiesAsync``1(System.String)">
+            <summary>
+            Queries entities in the table that match the specified OData filter.
+            </summary>
+            <typeparam name="T">The type of the entity, which must implement <see cref="T:Azure.Data.Tables.ITableEntity"/>.</typeparam>
+            <param name="filter">The OData filter expression for querying entities.</param>
+            <returns>A task representing the asynchronous operation, containing a list of entities that match the filter.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureTableStorage.CheckEntitiesExistAsync``1(System.Collections.Generic.List{System.String})">
+            <summary>
+            Checks if entities with the specified row keys exist in the table.
+            </summary>
+            <typeparam name="T">The type of the entity, which must implement <see cref="T:Azure.Data.Tables.ITableEntity"/>.</typeparam>
+            <param name="rowKeys">A list of row keys to check for existence in the table.</param>
+            <returns>A task representing the asynchronous operation, containing a list of row keys that exist in the table.</returns>
+        </member>
+        <member name="T:ScriptRunner.Plugins.AzureSuite.Models.AzureResource">
+            <summary>
+            Represents a generic Azure resource with its essential properties.
+            </summary>
+        </member>
+        <member name="P:ScriptRunner.Plugins.AzureSuite.Models.AzureResource.Name">
+            <summary>
+            Gets or sets the name of the resource.
+            </summary>
+        </member>
+        <member name="P:ScriptRunner.Plugins.AzureSuite.Models.AzureResource.ResourceId">
+            <summary>
+            Gets or sets the unique identifier (ID) of the resource.
+            </summary>
+        </member>
+        <member name="P:ScriptRunner.Plugins.AzureSuite.Models.AzureResource.ResourceType">
+            <summary>
+            Gets or sets the type of the resource (e.g., "Microsoft.Compute/virtualMachines").
+            </summary>
+        </member>
+        <member name="P:ScriptRunner.Plugins.AzureSuite.Models.AzureResource.Location">
+            <summary>
+            Gets or sets the geographic location of the resource.
+            </summary>
+        </member>
+        <member name="P:ScriptRunner.Plugins.AzureSuite.Models.AzureResource.ResourceGroupName">
+            <summary>
+            Gets or sets the name of the resource group containing this resource.
+            </summary>
+        </member>
+        <member name="T:ScriptRunner.Plugins.AzureSuite.Plugin">
+            <summary>
+                A plugin that registers and provides a restful client.
+            </summary>
+            <remarks>
+                This plugin demonstrates how to register a service with the host application's DI container.
+            </remarks>
+        </member>
+        <member name="P:ScriptRunner.Plugins.AzureSuite.Plugin.Name">
+            <summary>
+                Gets the name of the plugin.
+            </summary>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.Plugin.Initialize(System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+                Initializes the plugin with the provided configuration.
+            </summary>
+            <param name="configuration">A dictionary containing key-value pairs for the plugin's configuration.</param>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.Plugin.Execute">
+            <summary>
+                Executes the plugin's main functionality.
+            </summary>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.Plugin.RegisterServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+                Registers the plugin's services into the application's dependency injection container.
+            </summary>
+            <param name="services">The service collection to register the plugin's services into.</param>
+        </member>
+    </members>
+</doc>

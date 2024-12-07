@@ -1,0 +1,52 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <DocumentationFile>..\Plugins\$(AssemblyName).xml</DocumentationFile>
+        <RootNamespace>ScriptRunner.Plugins.AzureSuite</RootNamespace>
+        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Azure.Data.Tables" Version="12.9.1" />
+      <PackageReference Include="Azure.Identity" Version="1.13.1" />
+      <PackageReference Include="Azure.ResourceManager" Version="1.13.0" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.0" />
+      <PackageReference Include="ScriptRunner.Plugins" Version="1.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="CookBookPages\**\*" CopyToOutputDirectory="PreserveNewest" />
+        <Content Include="DemoScripts\**\*" CopyToOutputDirectory="PreserveNewest" />
+    </ItemGroup>
+
+    <!-- Separate Plugin DLL and Dependencies -->
+    <Target Name="SeparatePluginAndDependencies" AfterTargets="Build">
+        <!-- Ensure Dependencies subdirectory exists -->
+        <MakeDir Directories="..\Plugins\Dependencies" />
+
+        <!-- Collect the plugin DLL -->
+        <ItemGroup>
+            <PluginAssembly Include="$(TargetDir)$(AssemblyName).dll" />
+        </ItemGroup>
+
+        <!-- Copy the plugin DLL to the Plugins directory -->
+        <Copy SourceFiles="@(PluginAssembly)"
+              DestinationFolder="..\Plugins"
+              SkipUnchangedFiles="true" />
+
+        <!-- Collect dependencies explicitly from the build output -->
+        <ItemGroup>
+            <DependencyAssemblies Include="$(TargetDir)**\*.dll"
+                                  Exclude="$(TargetDir)$(AssemblyName).dll" />
+        </ItemGroup>
+
+        <!-- Copy dependencies to the Dependencies subdirectory -->
+        <Copy SourceFiles="@(DependencyAssemblies)"
+              DestinationFolder="..\Plugins\Dependencies"
+              SkipUnchangedFiles="true" />
+    </Target>
+    
+</Project>
