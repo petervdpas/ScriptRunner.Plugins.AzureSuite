@@ -15,8 +15,20 @@ public interface IAzureTableStorage
     /// </summary>
     /// <param name="connectionString">The connection string for the Storage Account.</param>
     /// <param name="tableName">The name of the table to interact with.</param>
-    void Initialize(string connectionString, string tableName);
+    void Initialize(string connectionString, string? tableName);
 
+    /// <summary>
+    ///     Lists all tables in the connected Azure Table Storage account.
+    /// </summary>
+    /// <returns>A list of table names.</returns>
+    Task<List<string>> ListTablesAsync();
+
+    /// <summary>
+    ///     Sets the table to interact with after initialization.
+    /// </summary>
+    /// <param name="tableName">The name of the table to interact with.</param>
+    void SetTable(string tableName);
+    
     /// <summary>
     /// Adds or updates an entity in the table.
     /// </summary>

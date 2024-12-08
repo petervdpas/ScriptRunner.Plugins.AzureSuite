@@ -15,6 +15,7 @@ public class AzureTableStorage : IAzureTableStorage
 {
     private string? _connectionString;
     private TableClient? _tableClient;
+    private TableServiceClient? _serviceClient;
     private string? _tableName;
 
     /// <summary>
@@ -23,13 +24,45 @@ public class AzureTableStorage : IAzureTableStorage
     /// </summary>
     /// <param name="connectionString">The connection string for the Storage Account.</param>
     /// <param name="tableName">The name of the table to interact with.</param>
-    public void Initialize(string connectionString, string tableName)
+    public void Initialize(string connectionString, string? tableName)
     {
         _connectionString = connectionString;
+        _serviceClient = new TableServiceClient(_connectionString);
+
+        if (tableName == null) return;
+
+        SetTable(tableName);
+    }
+
+    /// <summary>
+    ///     Lists all tables in the connected Azure Table Storage account.
+    /// </summary>
+    /// <returns>A list of table names.</returns>
+    public async Task<List<string>> ListTablesAsync()
+    {
+        EnsureServiceClientConfigured();
+
+        var tableNames = new List<string>();
+        await foreach (var tableItem in _serviceClient!.QueryAsync())
+        {
+            tableNames.Add(tableItem.Name);
+        }
+
+        return tableNames;
+    }
+    
+    /// <summary>
+    ///     Sets the table to interact with after initialization.
+    /// </summary>
+    /// <param name="tableName">The name of the table to interact with.</param>
+    public void SetTable(string tableName)
+    {
+        EnsureServiceClientConfigured();
+
         _tableName = tableName;
         _tableClient = new TableClient(_connectionString, _tableName);
     }
-
+    
     /// <summary>
     ///     Adds or updates an entity in the table.
     /// </summary>
@@ -122,6 +155,16 @@ public class AzureTableStorage : IAzureTableStorage
     private void EnsureConfigured()
     {
         if (string.IsNullOrEmpty(_connectionString) || string.IsNullOrEmpty(_tableName))
+            throw new InvalidOperationException(
+                "AzureTableStorage is not configured. Call Initialize() before performing any operations.");
+    }
+    
+    /// <summary>
+    ///     Ensures the service client is properly configured before performing operations like listing tables.
+    /// </summary>
+    private void EnsureServiceClientConfigured()
+    {
+        if (string.IsNullOrEmpty(_connectionString) || _serviceClient == null)
             throw new InvalidOperationException(
                 "AzureTableStorage is not configured. Call Initialize() before performing any operations.");
     }

@@ -18,7 +18,7 @@ namespace ScriptRunner.Plugins.AzureSuite;
     "Peter van de Pas",
     "1.0.2",
     "net8.0",
-    ["IAzureResourceClient", "IAzureKeyVault", "IAzureTableStorage"])]
+    ["IAzureResourceClient", "IAzureKeyVault", "IAzureTableStorage", "IAzureServiceBus"])]
 public class Plugin : IServicePlugin
 {
     /// <summary>
@@ -54,5 +54,6 @@ public class Plugin : IServicePlugin
         services.AddSingleton<IAzureResourceClient, AzureResourceClient>();
         services.AddSingleton<IAzureKeyVault, AzureKeyVault>();
         services.AddSingleton<IAzureTableStorage, AzureTableStorage>();
+        services.AddSingleton<IAzureServiceBus, AzureServiceBus>();
     }
 }
