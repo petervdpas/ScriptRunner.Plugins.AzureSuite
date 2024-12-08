@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
@@ -51,19 +52,45 @@ public class AzureKeyVault : IAzureKeyVault
     }
 
     /// <summary>
+    ///     Lists all secrets in the Azure Key Vault.
+    /// </summary>
+    /// <returns>A list of secret names.</returns>
+    public async Task<List<string>> ListSecretsAsync()
+    {
+        EnsureClientInitialized(nameof(ListSecretsAsync));
+
+        var secretNames = new List<string>();
+
+        try
+        {
+            await foreach (var secretProperties in _secretClient!.GetPropertiesOfSecretsAsync())
+            {
+                secretNames.Add(secretProperties.Name);
+            }
+
+            _logger.Debug($"Retrieved {secretNames.Count} secrets from Key Vault.");
+        }
+        catch (Exception ex)
+        {
+            _logger.Error($"Error listing secrets: {ex.Message}");
+            throw;
+        }
+
+        return secretNames;
+    }
+    
+    /// <summary>
     ///     Retrieves a secret from Azure Key Vault by its name.
     /// </summary>
     /// <param name="secretName">The name of the secret in the Key Vault.</param>
     /// <returns>The secret value.</returns>
     public async Task<string> GetSecretAsync(string secretName)
     {
-        if (_secretClient == null)
-            throw new InvalidOperationException(
-                "Key Vault client is not initialized. Call InitializeKeyVaultAsync first.");
+        EnsureClientInitialized(nameof(GetSecretAsync));
 
         try
         {
-            KeyVaultSecret secret = await _secretClient.GetSecretAsync(secretName);
+            KeyVaultSecret secret = await _secretClient!.GetSecretAsync(secretName);
             return secret.Value;
         }
         catch (Exception ex)
@@ -80,13 +107,11 @@ public class AzureKeyVault : IAzureKeyVault
     /// <param name="secretValue">The value of the secret.</param>
     public async Task SetSecretAsync(string secretName, string secretValue)
     {
-        if (_secretClient == null)
-            throw new InvalidOperationException(
-                "Key Vault client is not initialized. Call InitializeKeyVaultAsync first.");
+        EnsureClientInitialized(nameof(SetSecretAsync));
 
         try
         {
-            await _secretClient.SetSecretAsync(secretName, secretValue);
+            await _secretClient!.SetSecretAsync(secretName, secretValue);
             _logger.Debug($"Secret {secretName} set successfully.");
         }
         catch (Exception ex)
@@ -102,13 +127,11 @@ public class AzureKeyVault : IAzureKeyVault
     /// <param name="secretName">The name of the secret to delete.</param>
     public async Task DeleteSecretAsync(string secretName)
     {
-        if (_secretClient == null)
-            throw new InvalidOperationException(
-                "Key Vault client is not initialized. Call InitializeKeyVaultAsync first.");
+        EnsureClientInitialized(nameof(DeleteSecretAsync));
 
         try
         {
-            var operation = await _secretClient.StartDeleteSecretAsync(secretName);
+            var operation = await _secretClient!.StartDeleteSecretAsync(secretName);
             await operation.WaitForCompletionAsync();
             _logger.Debug($"Secret {secretName} deleted and in soft-delete state.");
         }
@@ -125,13 +148,11 @@ public class AzureKeyVault : IAzureKeyVault
     /// <param name="secretName">The name of the secret to purge.</param>
     public async Task PurgeSecretAsync(string secretName)
     {
-        if (_secretClient == null)
-            throw new InvalidOperationException(
-                "Key Vault client is not initialized. Call InitializeKeyVaultAsync first.");
+        EnsureClientInitialized(nameof(PurgeSecretAsync));
 
         try
         {
-            await _secretClient.PurgeDeletedSecretAsync(secretName);
+            await _secretClient!.PurgeDeletedSecretAsync(secretName);
             _logger.Debug($"Secret {secretName} purged and permanently deleted.");
         }
         catch (Exception ex)
@@ -147,13 +168,11 @@ public class AzureKeyVault : IAzureKeyVault
     /// <param name="secretName">The name of the secret to recover.</param>
     public async Task RecoverDeletedSecretAsync(string secretName)
     {
-        if (_secretClient == null)
-            throw new InvalidOperationException(
-                "Key Vault client is not initialized. Call InitializeKeyVaultAsync first.");
+        EnsureClientInitialized(nameof(RecoverDeletedSecretAsync));
 
         try
         {
-            await _secretClient.StartRecoverDeletedSecretAsync(secretName);
+            await _secretClient!.StartRecoverDeletedSecretAsync(secretName);
             _logger.Debug($"Secret {secretName} has been recovered.");
         }
         catch (Exception ex)
@@ -161,5 +180,23 @@ public class AzureKeyVault : IAzureKeyVault
             _logger.Error($"Error recovering secret {secretName}: {ex.Message}");
             throw;
         }
+    }
+    
+    /// <summary>
+    /// Ensures that the Key Vault client is properly initialized before performing operations.
+    /// </summary>
+    /// <param name="methodName">The name of the method invoking this check, used for context in error messages.</param>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown when the Key Vault client has not been initialized by calling <see cref="InitializeKeyVaultAsync"/>.
+    /// </exception>
+    /// <remarks>
+    /// This method acts as a guard clause to prevent methods from executing without a properly initialized
+    /// <see cref="SecretClient"/> instance. It provides clear and contextual error messages for debugging.
+    /// </remarks>
+    private static void EnsureClientInitialized(string methodName)
+    {
+        if (_secretClient == null)
+            throw new InvalidOperationException(
+                $"Key Vault client is not initialized. Call InitializeKeyVaultAsync first before invoking {methodName}.");
     }
 }

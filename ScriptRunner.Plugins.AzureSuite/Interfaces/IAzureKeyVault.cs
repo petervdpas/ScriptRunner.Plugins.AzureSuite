@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ScriptRunner.Plugins.AzureSuite.Interfaces;
 
@@ -14,6 +15,12 @@ public interface IAzureKeyVault
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     Task InitializeKeyVaultAsync(string vaultUrl);
 
+    /// <summary>
+    ///     Lists all secrets in the Azure Key Vault.
+    /// </summary>
+    /// <returns>A list of secret names.</returns>
+    Task<List<string>> ListSecretsAsync();
+    
     /// <summary>
     /// Retrieves a secret from Azure Key Vault by its name.
     /// </summary>
