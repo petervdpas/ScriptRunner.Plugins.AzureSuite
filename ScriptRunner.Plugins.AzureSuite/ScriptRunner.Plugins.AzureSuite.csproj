@@ -62,6 +62,8 @@
         <!-- Compress files using PowerShell -->
         <Exec Command="powershell -Command &quot;Compress-Archive -Path '..\Plugins\*' -DestinationPath '..\Plugins\$(AssemblyName).Plugin.zip' -Force&quot;" />
 
+        <Exec Command="powershell -Command &quot;Get-ChildItem -Path '..\Plugins' -Exclude '$(AssemblyName).Plugin.zip' | Remove-Item -Recurse -Force&quot;" />
+
     </Target>
     
 </Project>
