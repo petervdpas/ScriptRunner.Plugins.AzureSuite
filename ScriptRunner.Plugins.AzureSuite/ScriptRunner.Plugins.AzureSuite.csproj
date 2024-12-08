@@ -58,6 +58,10 @@
         <Copy SourceFiles="@(CookBookPages)"
               DestinationFolder="..\Plugins\CookBookPages"
               SkipUnchangedFiles="true" />
+
+        <!-- Compress files using PowerShell -->
+        <Exec Command="powershell -Command &quot;Compress-Archive -Path '..\Plugins\*' -DestinationPath '..\Plugins\$(AssemblyName).Plugin.zip' -Force&quot;" />
+
     </Target>
     
 </Project>
