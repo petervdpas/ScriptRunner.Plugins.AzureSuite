@@ -61,6 +61,12 @@
             </summary>
             <param name="vaultUrl">The URL of the Azure Key Vault.</param>
         </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureKeyVault.ListSecretsAsync">
+            <summary>
+                Lists all secrets in the Azure Key Vault.
+            </summary>
+            <returns>A list of secret names.</returns>
+        </member>
         <member name="M:ScriptRunner.Plugins.AzureSuite.AzureKeyVault.GetSecretAsync(System.String)">
             <summary>
                 Retrieves a secret from Azure Key Vault by its name.
@@ -92,6 +98,19 @@
                 Recovers a deleted secret from Azure Key Vault.
             </summary>
             <param name="secretName">The name of the secret to recover.</param>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureKeyVault.EnsureClientInitialized(System.String)">
+            <summary>
+            Ensures that the Key Vault client is properly initialized before performing operations.
+            </summary>
+            <param name="methodName">The name of the method invoking this check, used for context in error messages.</param>
+            <exception cref="T:System.InvalidOperationException">
+            Thrown when the Key Vault client has not been initialized by calling <see cref="M:ScriptRunner.Plugins.AzureSuite.AzureKeyVault.InitializeKeyVaultAsync(System.String)"/>.
+            </exception>
+            <remarks>
+            This method acts as a guard clause to prevent methods from executing without a properly initialized
+            <see cref="T:Azure.Security.KeyVault.Secrets.SecretClient"/> instance. It provides clear and contextual error messages for debugging.
+            </remarks>
         </member>
         <member name="T:ScriptRunner.Plugins.AzureSuite.AzureResourceClient">
             <summary>
@@ -195,6 +214,123 @@
             </summary>
             <exception cref="T:System.InvalidOperationException">Thrown when the subscription context is not set.</exception>
         </member>
+        <member name="T:ScriptRunner.Plugins.AzureSuite.AzureServiceBus">
+            <summary>
+                A helper class for interacting with Azure Service Bus.
+                Provides methods for sending and receiving messages, managing message properties (headers), and scheduling
+                messages.
+                Implements <see cref="T:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureServiceBus" />.
+            </summary>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureServiceBus.#ctor">
+            <summary>
+                Initializes a new instance of the <see cref="T:ScriptRunner.Plugins.AzureSuite.AzureServiceBus" /> class with default settings.
+            </summary>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureServiceBus.#ctor(Azure.Messaging.ServiceBus.ServiceBusClient)">
+            <summary>
+                Initializes a new instance of the <see cref="T:ScriptRunner.Plugins.AzureSuite.AzureServiceBus" /> class with a specified
+                <see cref="T:Azure.Messaging.ServiceBus.ServiceBusClient" />.
+                This constructor is useful for dependency injection and testing, allowing a custom or mocked
+                <see cref="T:Azure.Messaging.ServiceBus.ServiceBusClient" /> to be provided.
+            </summary>
+            <param name="client">
+                The <see cref="T:Azure.Messaging.ServiceBus.ServiceBusClient" /> to use for sending and receiving messages. Can be null if not
+                using dependency injection.
+            </param>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureServiceBus.Setup(System.String,System.String,System.String)">
+            <summary>
+                Sets up the connection string, queue name, and optional content type for the Azure Service Bus.
+            </summary>
+            <param name="connectionString">The connection string for the Service Bus namespace.</param>
+            <param name="queueName">The name of the queue to send and receive messages from.</param>
+            <param name="contentType">Optional. The content type for the messages, defaults to "application/json".</param>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureServiceBus.SwitchQueue(System.String)">
+            <summary>
+                Switches the active queue for sending/receiving messages without changing the connection string.
+            </summary>
+            <param name="queueName">The new queue name to switch to.</param>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureServiceBus.AddOrUpdateProperty(System.String,System.Object)">
+            <summary>
+                Adds or updates a property (header) for messages.
+            </summary>
+            <param name="key">The property key.</param>
+            <param name="value">The property value.</param>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureServiceBus.RemoveProperty(System.String)">
+            <summary>
+                Removes a property (header) by its key.
+            </summary>
+            <param name="key">The property key to remove.</param>
+            <returns>True if the property was removed; otherwise, false.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureServiceBus.ClearProperties">
+            <summary>
+                Clears all properties (headers).
+            </summary>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureServiceBus.SendMessageAsync(System.String,System.String)">
+            <summary>
+                Sends a message to the specified Azure Service Bus queue.
+            </summary>
+            <param name="messageBody">The message body to send to the queue.</param>
+            <param name="sessionId">Optional. The session ID for session-based messaging.</param>
+            <returns>A task representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureServiceBus.SendBatchMessagesAsync(System.Collections.Generic.List{System.String},System.String)">
+            <summary>
+                Sends a batch of messages to the specified Azure Service Bus queue.
+            </summary>
+            <param name="messages">A list of messages to send.</param>
+            <param name="sessionId">Optional session ID for session-based messaging.</param>
+            <returns>A task that represents the asynchronous operation.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureServiceBus.SendScheduledMessageAsync(System.String,System.DateTimeOffset,System.String)">
+            <summary>
+                Sends a message to the queue with scheduled delivery at a later time.
+            </summary>
+            <param name="messageBody">The message body to send to the queue.</param>
+            <param name="scheduleTimeUtc">The time at which to schedule the message for delivery.</param>
+            <param name="sessionId">Optional session ID for session-based messaging.</param>
+            <returns>A task that represents the asynchronous operation.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureServiceBus.ReceiveMessagesAsync(System.Int32,System.String)">
+            <summary>
+                Receives messages from the queue.
+            </summary>
+            <param name="maxMessages">The maximum number of messages to receive.</param>
+            <param name="sessionId">Optional session ID for session-based messaging.</param>
+            <returns>A list of messages received from the queue.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureServiceBus.CompleteMessageAsync(Azure.Messaging.ServiceBus.ServiceBusReceivedMessage)">
+            <summary>
+                Completes a received message, marking it as processed.
+            </summary>
+            <param name="message">The received message to complete.</param>
+            <returns>A task that represents the asynchronous operation.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureServiceBus.EnsureConfigured">
+            <summary>
+                Ensures that the Azure Service Bus is properly configured before any operations are performed.
+            </summary>
+            <remarks>
+                This method checks if the connection string and queue name have been set by the <see cref="M:ScriptRunner.Plugins.AzureSuite.AzureServiceBus.Setup(System.String,System.String,System.String)" /> method.
+                If either the connection string or queue name is missing, an <see cref="T:System.InvalidOperationException" /> is thrown.
+                This safeguard prevents the use of Azure Service Bus operations without proper configuration.
+            </remarks>
+            <exception cref="T:System.InvalidOperationException">
+                Thrown if the connection string or queue name has not been set by the <see cref="M:ScriptRunner.Plugins.AzureSuite.AzureServiceBus.Setup(System.String,System.String,System.String)" /> method.
+            </exception>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureServiceBus.CreateServiceBusClient">
+            <summary>
+                Creates and returns a new instance of the ServiceBusClient with configured options.
+            </summary>
+            <returns>A new instance of <see cref="T:Azure.Messaging.ServiceBus.ServiceBusClient" />.</returns>
+        </member>
         <member name="T:ScriptRunner.Plugins.AzureSuite.AzureTableStorage">
             <summary>
                 Provides methods for interacting with Azure Table Storage.
@@ -207,6 +343,18 @@
                 This must be called before performing any other operations.
             </summary>
             <param name="connectionString">The connection string for the Storage Account.</param>
+            <param name="tableName">The name of the table to interact with.</param>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureTableStorage.ListTablesAsync">
+            <summary>
+                Lists all tables in the connected Azure Table Storage account.
+            </summary>
+            <returns>A list of table names.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureTableStorage.SetTable(System.String)">
+            <summary>
+                Sets the table to interact with after initialization.
+            </summary>
             <param name="tableName">The name of the table to interact with.</param>
         </member>
         <member name="M:ScriptRunner.Plugins.AzureSuite.AzureTableStorage.UpsertEntityAsync``1(``0)">
@@ -260,6 +408,11 @@
                 Ensures the table client is properly configured before performing any operations.
             </summary>
         </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.AzureTableStorage.EnsureServiceClientConfigured">
+            <summary>
+                Ensures the service client is properly configured before performing operations like listing tables.
+            </summary>
+        </member>
         <member name="T:ScriptRunner.Plugins.AzureSuite.Interfaces.IArmClientWrapper">
             <summary>
             Defines a wrapper interface for the Azure Resource Manager (ARM) client to interact with Azure resources.
@@ -297,6 +450,12 @@
             </summary>
             <param name="vaultUrl">The URL of the Azure Key Vault.</param>
             <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureKeyVault.ListSecretsAsync">
+            <summary>
+                Lists all secrets in the Azure Key Vault.
+            </summary>
+            <returns>A list of secret names.</returns>
         </member>
         <member name="M:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureKeyVault.GetSecretAsync(System.String)">
             <summary>
@@ -416,6 +575,84 @@
             <param name="resourceName">The name of the resource to check for.</param>
             <returns><c>true</c> if the resource exists; otherwise, <c>false</c>.</returns>
         </member>
+        <member name="T:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureServiceBus">
+            <summary>
+            Defines methods for interacting with Azure Service Bus, including sending, receiving, and managing messages.
+            </summary>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureServiceBus.Setup(System.String,System.String,System.String)">
+            <summary>
+            Configures the Service Bus connection and sets the queue name for operations.
+            </summary>
+            <param name="connectionString">The connection string for the Service Bus namespace.</param>
+            <param name="queueName">The name of the queue to interact with.</param>
+            <param name="contentType">Optional. The content type of the messages, defaults to "application/json".</param>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureServiceBus.SwitchQueue(System.String)">
+            <summary>
+            Switches the active queue for sending and receiving messages.
+            </summary>
+            <param name="queueName">The new queue name to switch to.</param>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureServiceBus.AddOrUpdateProperty(System.String,System.Object)">
+            <summary>
+            Adds or updates a message property (header) that will be included in outgoing messages.
+            </summary>
+            <param name="key">The key of the property.</param>
+            <param name="value">The value of the property.</param>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureServiceBus.RemoveProperty(System.String)">
+            <summary>
+            Removes a message property (header) by its key.
+            </summary>
+            <param name="key">The key of the property to remove.</param>
+            <returns>True if the property was removed successfully, otherwise false.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureServiceBus.ClearProperties">
+            <summary>
+            Clears all message properties (headers).
+            </summary>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureServiceBus.SendMessageAsync(System.String,System.String)">
+            <summary>
+            Sends a single message to the specified Azure Service Bus queue.
+            </summary>
+            <param name="messageBody">The body of the message to send.</param>
+            <param name="sessionId">Optional. The session ID for session-based messaging.</param>
+            <returns>A task representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureServiceBus.SendBatchMessagesAsync(System.Collections.Generic.List{System.String},System.String)">
+            <summary>
+            Sends a batch of messages to the specified Azure Service Bus queue.
+            </summary>
+            <param name="messages">The list of message bodies to send.</param>
+            <param name="sessionId">Optional. The session ID for session-based messaging.</param>
+            <returns>A task representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureServiceBus.SendScheduledMessageAsync(System.String,System.DateTimeOffset,System.String)">
+            <summary>
+            Sends a message to the queue with scheduled delivery at a specified time.
+            </summary>
+            <param name="messageBody">The body of the message to send.</param>
+            <param name="scheduleTimeUtc">The time at which the message should be delivered, in UTC.</param>
+            <param name="sessionId">Optional. The session ID for session-based messaging.</param>
+            <returns>A task representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureServiceBus.ReceiveMessagesAsync(System.Int32,System.String)">
+            <summary>
+            Receives messages from the specified Azure Service Bus queue.
+            </summary>
+            <param name="maxMessages">The maximum number of messages to receive in one call.</param>
+            <param name="sessionId">Optional. The session ID for session-based messaging.</param>
+            <returns>A list of messages received from the queue.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureServiceBus.CompleteMessageAsync(Azure.Messaging.ServiceBus.ServiceBusReceivedMessage)">
+            <summary>
+            Marks a received message as complete, indicating that it has been processed successfully.
+            </summary>
+            <param name="message">The received message to complete.</param>
+            <returns>A task representing the asynchronous operation.</returns>
+        </member>
         <member name="T:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureTableStorage">
             <summary>
             Provides methods for interacting with Azure Table Storage.
@@ -427,6 +664,18 @@
             This must be called before performing any other operations.
             </summary>
             <param name="connectionString">The connection string for the Storage Account.</param>
+            <param name="tableName">The name of the table to interact with.</param>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureTableStorage.ListTablesAsync">
+            <summary>
+                Lists all tables in the connected Azure Table Storage account.
+            </summary>
+            <returns>A list of table names.</returns>
+        </member>
+        <member name="M:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureTableStorage.SetTable(System.String)">
+            <summary>
+                Sets the table to interact with after initialization.
+            </summary>
             <param name="tableName">The name of the table to interact with.</param>
         </member>
         <member name="M:ScriptRunner.Plugins.AzureSuite.Interfaces.IAzureTableStorage.UpsertEntityAsync``1(``0)">
