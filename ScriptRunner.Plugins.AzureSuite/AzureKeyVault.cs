@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using ScriptRunner.Plugins.AzureSuite.Interfaces;
+using ScriptRunner.Plugins.Logging;
 
 namespace ScriptRunner.Plugins.AzureSuite;
 

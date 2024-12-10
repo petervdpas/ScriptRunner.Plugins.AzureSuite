@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using ScriptRunner.Plugins.Attributes;
 using ScriptRunner.Plugins.AzureSuite.Interfaces;
@@ -16,41 +17,48 @@ namespace ScriptRunner.Plugins.AzureSuite;
     "AzureResource Client Plugin",
     "Provides ScriptRunner with a Azure Resource Client",
     "Peter van de Pas",
-    "1.0.2",
+    "1.0.18",
+    pluginSystemVersion: "1.0.2",
     "net8.0",
     ["IAzureResourceClient", "IAzureKeyVault", "IAzureTableStorage", "IAzureServiceBus"])]
-public class Plugin : IServicePlugin
+public class Plugin : BaseAsyncServicePlugin
 {
     /// <summary>
     ///     Gets the name of the plugin.
     /// </summary>
-    public string Name => "Azure Suite Plugin";
+    public override string Name => "Azure Suite Plugin";
 
     /// <summary>
-    ///     Initializes the plugin with the provided configuration.
+    /// Asynchronously initializes the plugin using the provided configuration.
     /// </summary>
-    /// <param name="configuration">A dictionary containing key-value pairs for the plugin's configuration.</param>
-    public void Initialize(IDictionary<string, object> configuration)
+    /// <param name="configuration">A dictionary containing configuration key-value pairs for the plugin.</param>
+    public override async Task InitializeAsync(IDictionary<string, object> configuration)
     {
+        // Simulate async initialization (e.g., loading settings or validating configurations)
+        await Task.Delay(100);
         Console.WriteLine(configuration.TryGetValue("AzureResourceClientKey", out var azureResourceClientValue)
             ? $"AzureResourceClientKey value: {azureResourceClientValue}"
             : "AzureResourceClientKey not found in configuration.");
     }
 
     /// <summary>
-    ///     Executes the plugin's main functionality.
+    /// Asynchronously executes the plugin's main functionality.
     /// </summary>
-    public void Execute()
+    public override async Task ExecuteAsync()
     {
+        // Example execution logic
+        await Task.Delay(50);
         Console.WriteLine("AzureResourceClient Plugin executed.");
     }
-
+    
     /// <summary>
-    ///     Registers the plugin's services into the application's dependency injection container.
+    /// Asynchronously registers the plugin's services into the application's dependency injection container.
     /// </summary>
-    /// <param name="services">The service collection to register the plugin's services into.</param>
-    public void RegisterServices(IServiceCollection services)
+    /// <param name="services">The service collection to register services into.</param>
+    public override async Task RegisterServicesAsync(IServiceCollection services)
     {
+        // Simulate async service registration (e.g., initializing an external resource)
+        await Task.Delay(50);
         services.AddSingleton<IAzureResourceClient, AzureResourceClient>();
         services.AddSingleton<IAzureKeyVault, AzureKeyVault>();
         services.AddSingleton<IAzureTableStorage, AzureTableStorage>();
