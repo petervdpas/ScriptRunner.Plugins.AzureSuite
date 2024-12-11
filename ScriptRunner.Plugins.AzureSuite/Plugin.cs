@@ -14,13 +14,13 @@ namespace ScriptRunner.Plugins.AzureSuite;
 ///     This plugin demonstrates how to register a service with the host application's DI container.
 /// </remarks>
 [PluginMetadata(
-    "AzureResource Client Plugin",
-    "Provides ScriptRunner with a Azure Resource Client",
-    "Peter van de Pas",
-    "1.0.18",
-    pluginSystemVersion: "1.0.2",
-    "net8.0",
-    ["IAzureResourceClient", "IAzureKeyVault", "IAzureTableStorage", "IAzureServiceBus"])]
+    name: "AzureResource Client Plugin",
+    description: "Provides ScriptRunner with a Azure Resource Client",
+    author: "Peter van de Pas",
+    version: "1.0.2",
+    pluginSystemVersion: "1.0.18",
+    frameworkVersion: ".NET 8.0",
+    services: ["IAzureResourceClient", "IAzureKeyVault", "IAzureTableStorage", "IAzureServiceBus"])]
 public class Plugin : BaseAsyncServicePlugin
 {
     /// <summary>
