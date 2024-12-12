@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using ScriptRunner.Plugins.Attributes;
 using ScriptRunner.Plugins.AzureSuite.Interfaces;
+using ScriptRunner.Plugins.Utilities;
 
 namespace ScriptRunner.Plugins.AzureSuite;
 
@@ -18,8 +19,8 @@ namespace ScriptRunner.Plugins.AzureSuite;
     description: "Provides ScriptRunner with a Azure Resource Client",
     author: "Peter van de Pas",
     version: "1.0.2",
-    pluginSystemVersion: "1.0.26",
-    frameworkVersion: ".NET 8.0",
+    pluginSystemVersion: PluginSystemConstants.CurrentPluginSystemVersion,
+    frameworkVersion: PluginSystemConstants.CurrentFrameworkVersion,
     services: ["IAzureResourceClient", "IAzureKeyVault", "IAzureTableStorage", "IAzureServiceBus"])]
 public class Plugin : BaseAsyncServicePlugin
 {
