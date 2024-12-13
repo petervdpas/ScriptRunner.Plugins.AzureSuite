@@ -21,7 +21,8 @@ namespace ScriptRunner.Plugins.AzureSuite;
     version: "1.0.2",
     pluginSystemVersion: PluginSystemConstants.CurrentPluginSystemVersion,
     frameworkVersion: PluginSystemConstants.CurrentFrameworkVersion,
-    services: ["IAzureResourceClient", "IAzureKeyVault", "IAzureTableStorage", "IAzureServiceBus"])]
+    services: ["IAzureResourceClient", "IAzureKeyVault", "IAzureTableStorage", "IAzureServiceBus"],
+    skipLibraryChecks: ["System.ClientModel.dll", "System.Memory.Data.dll"])]
 public class Plugin : BaseAsyncServicePlugin
 {
     /// <summary>
