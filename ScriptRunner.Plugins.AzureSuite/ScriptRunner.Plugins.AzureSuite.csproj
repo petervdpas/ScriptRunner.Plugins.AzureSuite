@@ -72,7 +72,7 @@
         <!-- Define Compression and Cleanup Commands -->
         <PropertyGroup>
             <CompressionCommand Condition="'$(PowerShellAvailable)' == '0'">
-                powershell -Command &quot;Compress-Archive -Path '..\Plugins\*' -DestinationPath '..\Plugins\$(AssemblyName).Plugin.zip' -Force&quot;
+                powershell -Command &quot;Compress-Archive -Path '..\Plugins\' -DestinationPath '..\Plugins\$(AssemblyName).Plugin.zip' -Force&quot;
             </CompressionCommand>
             <CleanupCommand Condition="'$(PowerShellAvailable)' == '0'">
                 powershell -Command &quot;Get-ChildItem -Path '..\Plugins' -Exclude '$(AssemblyName).Plugin.zip' | Remove-Item -Recurse -Force&quot;
