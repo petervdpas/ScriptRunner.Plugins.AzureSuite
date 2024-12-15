@@ -4,22 +4,18 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using ScriptRunner.Plugins.Attributes;
 using ScriptRunner.Plugins.AzureSuite.Interfaces;
-using ScriptRunner.Plugins.Interfaces;
 using ScriptRunner.Plugins.Utilities;
 
 namespace ScriptRunner.Plugins.AzureSuite;
 
 /// <summary>
-///     A plugin that registers and provides a restful client.
+///     A plugin that registers and provides several Azure utilities.
 /// </summary>
-/// <remarks>
-///     This plugin demonstrates how to register a service with the host application's DI container.
-/// </remarks>
 [PluginMetadata(
-    name: "AzureResource Client Plugin",
-    description: "Provides ScriptRunner with a Azure Resource Client",
+    name: "Azure Suite Plugin",
+    description: "Provides ScriptRunner with several Azure utilities",
     author: "Peter van de Pas",
-    version: "1.0.2",
+    version: "1.0.4",
     pluginSystemVersion: PluginSystemConstants.CurrentPluginSystemVersion,
     frameworkVersion: PluginSystemConstants.CurrentFrameworkVersion,
     services: ["IAzureResourceClient", "IAzureKeyVault", "IAzureTableStorage", "IAzureServiceBus"])]
@@ -61,7 +57,6 @@ public class Plugin : BaseAsyncServicePlugin
     {
         // Simulate async service registration (e.g., initializing an external resource)
         await Task.Delay(50);
-        services.AddSingleton<IDatabase, MssqlDatabase>();
         services.AddSingleton<IAzureResourceClient, AzureResourceClient>();
         services.AddSingleton<IAzureKeyVault, AzureKeyVault>();
         services.AddSingleton<IAzureTableStorage, AzureTableStorage>();
