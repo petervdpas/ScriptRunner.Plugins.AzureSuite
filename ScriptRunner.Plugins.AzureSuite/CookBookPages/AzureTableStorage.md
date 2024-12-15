@@ -60,7 +60,7 @@ foreach (var tableName in tableNames)
 
 ### Step 3: Set a Table to Work With
 
-Set the table to interact with for subsequent operations:
+Set the table to interact with for further operations:
 
 ```csharp
 var tableName = "example-table";
