@@ -22,11 +22,6 @@ namespace ScriptRunner.Plugins.AzureSuite;
     sharedDependencies: [
         "Azure.Core.dll",
         "Azure.Identity.dll",
-        "Azure.Data.Tables.dll",
-        "Azure.Messaging.ServiceBus.dll",
-        "Azure.ResourceManager.dll",
-        "Azure.Security.KeyVault.Secrets.dll",
-        "Azure.Core.Amqp.dll",
         "System.IdentityModel.Tokens.Jwt.dll",
         "System.Memory.Data.dll"
     ]
