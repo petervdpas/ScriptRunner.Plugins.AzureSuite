@@ -18,18 +18,7 @@ namespace ScriptRunner.Plugins.AzureSuite;
     version: "1.0.4",
     pluginSystemVersion: PluginSystemConstants.CurrentPluginSystemVersion,
     frameworkVersion: PluginSystemConstants.CurrentFrameworkVersion,
-    services: ["IAzureResourceClient", "IAzureKeyVault", "IAzureTableStorage", "IAzureServiceBus"],
-    sharedDependencies: [
-        "Azure.Core.dll",
-        "Azure.Identity.dll",
-        "Azure.Data.Tables.dll",
-        "Azure.Messaging.ServiceBus.dll",
-        "Azure.ResourceManager.dll",
-        "Azure.Security.KeyVault.Secrets.dll",
-        "Azure.Core.Amqp.dll",
-        "System.IdentityModel.Tokens.Jwt.dll",
-        "System.Memory.Data.dll"
-    ]
+    services: ["IAzureResourceClient", "IAzureKeyVault", "IAzureTableStorage", "IAzureServiceBus"]
     )]
 public class Plugin : BaseAsyncServicePlugin
 {
