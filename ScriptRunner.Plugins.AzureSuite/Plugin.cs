@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using ScriptRunner.Plugins.Attributes;
 using ScriptRunner.Plugins.AzureSuite.Interfaces;
+using ScriptRunner.Plugins.Interfaces;
 using ScriptRunner.Plugins.Utilities;
 
 namespace ScriptRunner.Plugins.AzureSuite;
@@ -18,14 +19,14 @@ namespace ScriptRunner.Plugins.AzureSuite;
     version: "1.0.4",
     pluginSystemVersion: PluginSystemConstants.CurrentPluginSystemVersion,
     frameworkVersion: PluginSystemConstants.CurrentFrameworkVersion,
-    services: ["IAzureResourceClient", "IAzureKeyVault", "IAzureTableStorage", "IAzureServiceBus"]
+    services: ["IAzureResourceClient", "IAzureKeyVault", "IAzureTableStorage", "IAzureServiceBus", "MssqlDatabase"]
     )]
 public class Plugin : BaseAsyncServicePlugin
 {
     /// <summary>
     ///     Gets the name of the plugin.
     /// </summary>
-    public override string Name => "Azure Suite Plugin";
+    public override string Name => "Mssql + Azure Suite Plugin";
 
     /// <summary>
     /// Asynchronously initializes the plugin using the provided configuration.
@@ -58,6 +59,8 @@ public class Plugin : BaseAsyncServicePlugin
     {
         // Simulate async service registration (e.g., initializing an external resource)
         await Task.Delay(50);
+        
+        services.AddSingleton<IDatabase, MssqlDatabase>();
         services.AddSingleton<IAzureResourceClient, AzureResourceClient>();
         services.AddSingleton<IAzureKeyVault, AzureKeyVault>();
         services.AddSingleton<IAzureTableStorage, AzureTableStorage>();
