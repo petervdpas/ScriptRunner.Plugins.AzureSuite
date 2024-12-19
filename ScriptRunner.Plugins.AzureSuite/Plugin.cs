@@ -19,7 +19,8 @@ namespace ScriptRunner.Plugins.AzureSuite;
     version: "1.0.4",
     pluginSystemVersion: PluginSystemConstants.CurrentPluginSystemVersion,
     frameworkVersion: PluginSystemConstants.CurrentFrameworkVersion,
-    services: ["IAzureResourceClient", "IAzureKeyVault", "IAzureTableStorage", "IAzureServiceBus", "MssqlDatabase"]
+    services: ["IAzureResourceClient", "IAzureKeyVault", "IAzureTableStorage", "IAzureServiceBus", "MssqlDatabase"],
+    skipLibraryChecks: ["Microsoft.Data.SqlClient.SNI.dll"]
     )]
 public class Plugin : BaseAsyncServicePlugin
 {
