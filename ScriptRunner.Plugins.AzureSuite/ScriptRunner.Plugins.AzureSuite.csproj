@@ -18,34 +18,23 @@
       <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.0" />
       <PackageReference Include="Microsoft.Identity.Client" Version="4.66.2" />
-      <PackageReference Include="ScriptRunner.Plugins" Version="1.6.22" />
+      <PackageReference Include="ScriptRunner.Plugins" Version="1.6.26" />
     </ItemGroup>
     
     <!-- Separate Plugin DLL and Dependencies -->
     <Target Name="SeparatePluginAndDependencies" AfterTargets="Build">
         <!-- Ensure Dependencies subdirectory exists -->
-        <MakeDir Directories="..\Plugins\Dependencies" />
+        <MakeDir Directories="..\Plugins" />
 
-        <!-- Collect the plugin DLL -->
+        <!-- Recursively Copy EVERYTHING from $(TargetDir), including subdirectories -->
         <ItemGroup>
-            <PluginAssembly Include="$(TargetDir)$(AssemblyName).dll" />
+            <AllFiles Include="$(TargetDir)**\*" />
         </ItemGroup>
 
-        <!-- Copy the plugin DLL to the Plugins directory -->
-        <Copy SourceFiles="@(PluginAssembly)"
-              DestinationFolder="..\Plugins"
-              SkipUnchangedFiles="true" />
-
-        <!-- Collect dependencies explicitly from the build output -->
-        <ItemGroup>
-            <DependencyAssemblies Include="$(TargetDir)**\*.dll"
-                                  Exclude="$(TargetDir)$(AssemblyName).dll" />
-        </ItemGroup>
-
-        <!-- Copy dependencies to the Dependencies subdirectory -->
-        <Copy SourceFiles="@(DependencyAssemblies)"
-              DestinationFolder="..\Plugins\Dependencies"
-              SkipUnchangedFiles="true" />
+        <!-- Recursively Copy Files While Preserving Directory Structure -->
+        <Copy SourceFiles="@(AllFiles)"
+              DestinationFiles="..\Plugins\%(RecursiveDir)%(Filename)%(Extension)"
+              SkipUnchangedFiles="false" />
 
         <!-- Copy DemoScripts and CookBooks to the Plugins directory -->
         <ItemGroup>
@@ -60,7 +49,7 @@
         <Copy SourceFiles="@(CookBookPages)"
               DestinationFolder="..\Plugins\CookBookPages"
               SkipUnchangedFiles="true" />
-
+        
         <!-- Check if PowerShell is available -->
         <Exec Command="powershell -File CheckPowerShell.ps1"
               IgnoreExitCode="true"
