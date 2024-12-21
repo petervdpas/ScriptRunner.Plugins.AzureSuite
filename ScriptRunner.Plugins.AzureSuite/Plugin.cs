@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using ScriptRunner.Plugins.Attributes;
 using ScriptRunner.Plugins.AzureSuite.Interfaces;
-using ScriptRunner.Plugins.Interfaces;
 using ScriptRunner.Plugins.Utilities;
 
 namespace ScriptRunner.Plugins.AzureSuite;
