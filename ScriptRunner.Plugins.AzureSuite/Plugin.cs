@@ -15,7 +15,7 @@ namespace ScriptRunner.Plugins.AzureSuite;
     name: "Azure Suite Plugin",
     description: "Provides ScriptRunner with several Azure utilities",
     author: "Peter van de Pas",
-    version: "1.0.4",
+    version: "1.0.0",
     pluginSystemVersion: PluginSystemConstants.CurrentPluginSystemVersion,
     frameworkVersion: PluginSystemConstants.CurrentFrameworkVersion,
     services: ["IAzureResourceClient", "IAzureKeyVault", "IAzureTableStorage", "IAzureServiceBus", "MssqlDatabase"]

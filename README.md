@@ -1,5 +1,8 @@
 # Azure Resource Client Plugin
 
+![License](https://img.shields.io/badge/license-MIT-green)  
+![Version](https://img.shields.io/badge/version-1.0.0-blue)
+
 The **Azure Resource Client Plugin** is a powerful extension for [ScriptRunner](https://github.com/petervdpas/ScriptRunner) that allows you to interact seamlessly with Azure resources. Using the Azure Resource Manager (ARM) SDK, this plugin provides a variety of features to list, filter, and manage resources in your Azure subscriptions.
 
 ---
@@ -110,14 +113,20 @@ Contributions are welcome! If you find a bug or want to enhance the plugin, feel
 
 ---
 
-## License
-
-This project is licensed under the [MIT License](LICENSE).
-
----
-
 ## Author
 
 Developed with **🧡 passion** by **Peter van de Pas**.
 
 For any questions or feedback, feel free to open an issue or contact me directly!
+
+---
+
+## 🔗 Links
+
+- [ScriptRunner Plugins Repository](https://github.com/petervdpas/ScriptRunner.Plugins)
+
+---
+
+## License
+
+This project is licensed under the [MIT License](./LICENSE).
