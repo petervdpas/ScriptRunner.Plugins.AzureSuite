@@ -60,7 +60,6 @@ public class Plugin : BaseAsyncServicePlugin
         // Simulate async service registration (e.g., initializing an external resource)
         await Task.Delay(50);
         
-        services.AddSingleton<IDatabase, MssqlDatabase>();
         services.AddSingleton<IAzureResourceClient, AzureResourceClient>();
         services.AddSingleton<IAzureKeyVault, AzureKeyVault>();
         services.AddSingleton<IAzureTableStorage, AzureTableStorage>();
