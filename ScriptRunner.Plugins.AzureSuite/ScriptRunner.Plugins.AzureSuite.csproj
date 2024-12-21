@@ -18,7 +18,7 @@
       <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.0" />
       <PackageReference Include="Microsoft.Identity.Client" Version="4.66.2" />
-      <PackageReference Include="ScriptRunner.Plugins" Version="1.6.30" />
+      <PackageReference Include="ScriptRunner.Plugins" Version="1.6.32" />
     </ItemGroup>
     
     <!-- Separate Plugin DLL and Dependencies -->
